@@ -1,0 +1,50 @@
+[project]
+name = "prosight-locus-api"
+version = "0.1.0"
+description = "Django REST API for RNACentral locus data."
+requires-python = ">=3.13"
+readme = "README.md"
+dependencies = []
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.test_settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+addopts = "--strict-markers --disable-warnings --cov=apps --cov=config --cov-report=term-missing"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["apps", "config"]
+omit = [
+  "*/migrations/*",
+  "*/tests/*",
+  "config/asgi.py",
+  "config/wsgi.py",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+src = ["apps", "config", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "DJ", "RUF"]
+ignore = ["DJ008"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["apps", "config"]
+
+[tool.mypy]
+python_version = "3.13"
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+strict = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+exclude = [".venv", "build", "dist"]
+
+[tool.django-stubs]
+django_settings_module = "config.settings"
+
+[[tool.mypy.overrides]]
+module = ["tests.*", "config.test_settings"]
+ignore_errors = true
